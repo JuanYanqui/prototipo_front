@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/WEB-INF/template.xhtml">
+    <!-- PANTALLA: INICIO -->
+    <ui:define name="content">
+        <div class="cabecera">
+            <h:outputText value="Bienvenido" styleClass="titulo"/>
+        </div>
+        <p class="subtitulo">Sistema de ventas con control de stock y concurrencia. Elija un módulo.</p>
+
+        <div class="tarjetas">
+            <h:link outcome="/ventas/ventaNueva" styleClass="tarjeta">
+                <i class="pi pi-shopping-cart"/>
+                <h3>Nueva venta</h3>
+                <p>Cliente, carrito y total en una sola pantalla.</p>
+            </h:link>
+            <h:link outcome="/ventas/ventaHistorial" styleClass="tarjeta">
+                <i class="pi pi-list"/>
+                <h3>Historial de ventas</h3>
+                <p>Últimas ventas con su detalle.</p>
+            </h:link>
+            <h:link outcome="/inventario/inventarioProductos" styleClass="tarjeta">
+                <i class="pi pi-box"/>
+                <h3>Inventario</h3>
+                <p>Stock y versión; edición protegida contra cambios simultáneos.</p>
+            </h:link>
+            <h:link outcome="/demo/demoConcurrencia" styleClass="tarjeta">
+                <i class="pi pi-bolt"/>
+                <h3>Demo concurrencia</h3>
+                <p>Varios vendedores compran a la vez: nunca se vende sin stock.</p>
+            </h:link>
+        </div>
+    </ui:define>
+</ui:composition>
