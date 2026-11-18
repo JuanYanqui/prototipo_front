@@ -19,7 +19,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <!-- Clase principal: NetBeans la usa al pulsar Run (F6) -->
         <start-class>com.comercialnova.front.FrontApplication</start-class>
         <joinfaces.version>4.7.18</joinfaces.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,7 +26,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- JoinFaces: integra JSF (Mojarra 2.3) y PrimeFaces con Spring Boot -->
             <dependency>
                 <groupId>org.joinfaces</groupId>
                 <artifactId>joinfaces-dependencies</artifactId>
@@ -39,12 +37,11 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- JSF + PrimeFaces + Tomcat embebido (la "V" de MVC) -->
         <dependency>
             <groupId>org.joinfaces</groupId>
             <artifactId>primefaces-spring-boot-starter</artifactId>
         </dependency>
-        <!-- RestTemplate + Jackson para llamar a la API del back -->
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -54,6 +51,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Para quitar el warning de @Named -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
     </dependencies>
 
