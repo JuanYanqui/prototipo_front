@@ -5,9 +5,9 @@
     <!-- PANTALLA: INICIO -->
     <ui:define name="content">
         <div class="cabecera">
-            <h:outputText value="Bienvenido" styleClass="titulo"/>
+            <h:outputText value="Bienvenido, #{SesionUsuario.nombre}" styleClass="titulo"/>
         </div>
-        <p class="subtitulo">Sistema de ventas con control de stock y concurrencia. Elija un módulo.</p>
+        <p class="subtitulo">Sistema de ventas con control de stock y concurrencia. Perfil: #{SesionUsuario.rol}.</p>
 
         <div class="tarjetas">
             <h:link outcome="/ventas/ventaNueva" styleClass="tarjeta">
@@ -20,12 +20,12 @@
                 <h3>Historial de ventas</h3>
                 <p>Últimas ventas con su detalle.</p>
             </h:link>
-            <h:link outcome="/inventario/inventarioProductos" styleClass="tarjeta">
+            <h:link outcome="/inventario/inventarioProductos" styleClass="tarjeta" rendered="#{SesionUsuario.admin}">
                 <i class="pi pi-box"/>
                 <h3>Inventario</h3>
                 <p>Stock y versión; edición protegida contra cambios simultáneos.</p>
             </h:link>
-            <h:link outcome="/demo/demoConcurrencia" styleClass="tarjeta">
+            <h:link outcome="/demo/demoConcurrencia" styleClass="tarjeta" rendered="#{SesionUsuario.admin}">
                 <i class="pi pi-bolt"/>
                 <h3>Demo concurrencia</h3>
                 <p>Varios vendedores compran a la vez: nunca se vende sin stock.</p>

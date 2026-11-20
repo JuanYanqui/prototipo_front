@@ -5,6 +5,7 @@ import com.comercialnova.front.api.ClienteApi;
 import com.comercialnova.front.api.ProductoApi;
 import com.comercialnova.front.api.VentaApi;
 import com.comercialnova.front.core.CtrTemplate;
+import com.comercialnova.front.core.SesionUsuario;
 import com.comercialnova.front.modelo.Cliente;
 import com.comercialnova.front.modelo.ItemCarrito;
 import com.comercialnova.front.modelo.Producto;
@@ -25,6 +26,7 @@ public class CtrVentaNueva extends CtrTemplate {
     private final transient ClienteApi clienteApi;
     private final transient ProductoApi productoApi;
     private final transient VentaApi ventaApi;
+    private final transient SesionUsuario sesionUsuario;
 
     private List<Cliente> clientes = Collections.emptyList();
     private List<Producto> productos = Collections.emptyList();
@@ -35,15 +37,20 @@ public class CtrVentaNueva extends CtrTemplate {
     private Long productoId;
     private Integer cantidad = 1;
 
-    public CtrVentaNueva(ClienteApi clienteApi, ProductoApi productoApi, VentaApi ventaApi) {
+    public CtrVentaNueva(ClienteApi clienteApi, ProductoApi productoApi, VentaApi ventaApi,
+                         SesionUsuario sesionUsuario) {
         super("Nueva venta");
         this.clienteApi = clienteApi;
         this.productoApi = productoApi;
         this.ventaApi = ventaApi;
+        this.sesionUsuario = sesionUsuario;
     }
 
     @PostConstruct
     public void init() {
+        if (sesionUsuario.getNombre() != null) {
+            vendedor = sesionUsuario.getNombre();
+        }
         try {
             clientes = clienteApi.listar();
             if (!clientes.isEmpty()) {

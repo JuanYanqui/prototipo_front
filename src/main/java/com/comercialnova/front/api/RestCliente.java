@@ -1,10 +1,17 @@
 package com.comercialnova.front.api;
 
+import com.comercialnova.front.core.SesionUsuario;
 import com.comercialnova.front.modelo.ApiError;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.function.Supplier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
@@ -16,11 +23,29 @@ public class RestCliente {
     private final RestTemplate rest;
     private final ObjectMapper mapper;
     private final String apiUrl;
+    private final SesionUsuario sesionUsuario;
 
-    public RestCliente(RestTemplateBuilder builder, ObjectMapper mapper, @Value("${api.url}") String apiUrl) {
-        this.rest = builder.rootUri(apiUrl).build();
+    public RestCliente(RestTemplateBuilder builder,
+                       ObjectMapper mapper,
+                       @Value("${api.url}") String apiUrl,
+                       @Lazy SesionUsuario sesionUsuario) {
         this.mapper = mapper;
         this.apiUrl = apiUrl;
+        this.sesionUsuario = sesionUsuario;
+        this.rest = builder
+                .rootUri(apiUrl)
+                .additionalInterceptors(new ClientHttpRequestInterceptor() {
+                    @Override
+                    public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+                                                        ClientHttpRequestExecution execution) throws IOException {
+                        String sessionId = RestCliente.this.sesionUsuario.getSessionId();
+                        if (sessionId != null && !sessionId.isEmpty()) {
+                            request.getHeaders().set("X-Session-Id", sessionId);
+                        }
+                        return execution.execute(request, body);
+                    }
+                })
+                .build();
     }
 
     public RestTemplate rest() {
