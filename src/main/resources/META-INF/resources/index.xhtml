@@ -2,7 +2,6 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="/WEB-INF/template.xhtml">
-    <!-- PANTALLA: INICIO -->
     <ui:define name="content">
         <div class="cabecera">
             <h:outputText value="Bienvenido, #{SesionUsuario.nombre}" styleClass="titulo"/>
@@ -31,7 +30,6 @@
                 <p>Varios vendedores compran a la vez: nunca se vende sin stock.</p>
             </h:link>
             
-            <!-- NUEVA TARJETA PARA EL DASHBOARD -->
             <h:link outcome="/dashboard" styleClass="tarjeta">
                 <i class="pi pi-chart-bar"/>
                 <h3>Dashboard</h3>

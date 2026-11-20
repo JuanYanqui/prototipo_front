@@ -3,7 +3,7 @@ package com.comercialnova.front.modelo;
 import java.util.List;
 
 public class Dashboard {
-    
+
     private List<String> nombresProductos;
     private List<Integer> stocksProductos;
     private long stockNormal;

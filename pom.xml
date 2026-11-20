@@ -53,7 +53,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Para quitar el warning de @Named -->
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>

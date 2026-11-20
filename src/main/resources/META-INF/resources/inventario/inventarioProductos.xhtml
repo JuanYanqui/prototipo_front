@@ -4,7 +4,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
-    <!-- PANTALLA: INVENTARIO  ·  Controlador: beans/inventario/CtrInventarioProductos.java -->
     <ui:define name="content">
         <h:form id="frmListado">
             <div class="cabecera">
@@ -47,7 +46,6 @@
                 </p:column>
             </p:dataTable>
 
-            <!-- Edicion (bloqueo optimista con "version"); un cambio de stock queda como AJUSTE en el Kardex -->
             <p:panel header="Editar producto (versión que usted abrió: #{CtrInventarioProductos.edicion.version})"
                      rendered="#{CtrInventarioProductos.editando}" styleClass="panel-edicion">
                 <div class="formgrid">

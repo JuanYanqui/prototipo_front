@@ -41,12 +41,11 @@ public class DashboardBean implements Serializable {
         }
     }
 
-    // Getters para que el XHTML pueda leer los datos
-    public Dashboard getDatos() { 
-        return datos; 
+    public Dashboard getDatos() {
+        return datos;
     }
-    
-    public long getTotalProductos() { 
-        return totalProductos; 
+
+    public long getTotalProductos() {
+        return totalProductos;
     }
 }

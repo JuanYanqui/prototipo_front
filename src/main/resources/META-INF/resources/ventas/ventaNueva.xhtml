@@ -4,7 +4,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
-    <!-- PANTALLA: NUEVA VENTA  ·  Controlador: beans/ventas/CtrVentaNueva.java -->
     <ui:define name="content">
         <h:form id="frmVenta">
             <div class="cabecera">
@@ -18,7 +17,6 @@
             </div>
             <p:separator/>
 
-            <!-- Datos de la venta -->
             <div class="formgrid">
                 <div class="campo">
                     <p:outputLabel for="cliente" value="Cliente"/>
@@ -48,7 +46,6 @@
                 </div>
             </div>
 
-            <!-- Carrito -->
             <p:dataTable id="tblCarrito" value="#{CtrVentaNueva.carrito}" var="item"
                          emptyMessage="Sin productos" styleClass="tabla">
                 <f:facet name="header">Carrito</f:facet>

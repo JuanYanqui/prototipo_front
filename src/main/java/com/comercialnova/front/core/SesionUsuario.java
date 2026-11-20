@@ -40,7 +40,6 @@ public class SesionUsuario implements Serializable {
                 authApi.logout();
             }
         } catch (ApiException ignorada) {
-            // Si el back ya no tiene la sesion, igual limpiamos el front.
         }
         limpiar();
         return "/login/login?faces-redirect=true";
