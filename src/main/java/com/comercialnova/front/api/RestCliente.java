@@ -12,6 +12,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
@@ -19,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class RestCliente {
+
+    private static final ThreadLocal<String> SESION_HILO = new ThreadLocal<>();
 
     private final RestTemplate rest;
     private final ObjectMapper mapper;
@@ -34,11 +37,16 @@ public class RestCliente {
         this.sesionUsuario = sesionUsuario;
         this.rest = builder
                 .rootUri(apiUrl)
+                .requestFactory(() -> {
+                    SimpleClientHttpRequestFactory fabrica = new SimpleClientHttpRequestFactory();
+                    fabrica.setOutputStreaming(false);
+                    return fabrica;
+                })
                 .additionalInterceptors(new ClientHttpRequestInterceptor() {
                     @Override
                     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
                                                         ClientHttpRequestExecution execution) throws IOException {
-                        String sessionId = RestCliente.this.sesionUsuario.getSessionId();
+                        String sessionId = sesionDelHilo();
                         if (sessionId != null && !sessionId.isEmpty()) {
                             request.getHeaders().set("X-Session-Id", sessionId);
                         }
@@ -50,6 +58,31 @@ public class RestCliente {
 
     public RestTemplate rest() {
         return rest;
+    }
+
+    public String sesionActual() {
+        return sesionUsuario.getSessionId();
+    }
+
+    public <T> T conSesion(String sessionId, Supplier<T> llamada) {
+        SESION_HILO.set(sessionId);
+        try {
+            return llamada.get();
+        } finally {
+            SESION_HILO.remove();
+        }
+    }
+
+    private String sesionDelHilo() {
+        String explicita = SESION_HILO.get();
+        if (explicita != null) {
+            return explicita;
+        }
+        try {
+            return sesionUsuario.getSessionId();
+        } catch (RuntimeException sinPeticionWeb) {
+            return null;
+        }
     }
 
     public <T> T llamar(Supplier<T> llamada) {

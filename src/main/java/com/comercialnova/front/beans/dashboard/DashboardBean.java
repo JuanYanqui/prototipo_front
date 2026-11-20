@@ -1,9 +1,10 @@
 package com.comercialnova.front.beans.dashboard;
 
+import com.comercialnova.front.api.ApiException;
+import com.comercialnova.front.api.RestCliente;
+import com.comercialnova.front.core.FacesUtils;
 import com.comercialnova.front.modelo.Dashboard;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -15,14 +16,14 @@ import java.io.Serializable;
 @Component
 public class DashboardBean implements Serializable {
 
+    private final transient RestCliente cliente;
+
     private Dashboard datos;
     private long totalProductos = 0;
-    
-    private final RestTemplate restTemplate = new RestTemplate();
 
-    // Inyecta la URL automáticamente desde el application.properties
-    @Value("${api.url}")
-    private String apiBaseUrl;
+    public DashboardBean(RestCliente cliente) {
+        this.cliente = cliente;
+    }
 
     @PostConstruct
     public void init() {
@@ -31,15 +32,12 @@ public class DashboardBean implements Serializable {
 
     public void cargarDatos() {
         try {
-            // Concatenamos la URL base (http://localhost:8090) con el endpoint
-            String endpoint = apiBaseUrl + "/api/dashboard";
-            
-            datos = restTemplate.getForObject(endpoint, Dashboard.class);
+            datos = cliente.llamar(() -> cliente.rest().getForObject("/api/dashboard", Dashboard.class));
             if (datos != null && datos.getNombresProductos() != null) {
                 totalProductos = datos.getNombresProductos().size();
             }
-        } catch (Exception e) {
-            System.out.println("ERROR DE CONEXIÓN CON EL BACKEND: " + e.getMessage());
+        } catch (ApiException e) {
+            FacesUtils.msgError("Dashboard", e.getMessage());
         }
     }
 

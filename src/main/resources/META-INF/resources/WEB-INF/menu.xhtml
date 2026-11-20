@@ -8,6 +8,8 @@
             <p:menu styleClass="menu-lateral">
                 <p:menuitem value="Inicio" outcome="/index" icon="pi pi-home"
                             styleClass="#{view.viewId eq '/index.xhtml' ? 'menu-activo' : ''}"/>
+                <p:menuitem value="Dashboard" outcome="/dashboard" icon="pi pi-chart-bar"
+                            styleClass="#{view.viewId eq '/dashboard.xhtml' ? 'menu-activo' : ''}"/>
                 <p:submenu label="Ventas">
                     <p:menuitem value="Nueva venta" outcome="/ventas/ventaNueva" icon="pi pi-shopping-cart"
                                 styleClass="#{view.viewId eq '/ventas/ventaNueva.xhtml' ? 'menu-activo' : ''}"/>

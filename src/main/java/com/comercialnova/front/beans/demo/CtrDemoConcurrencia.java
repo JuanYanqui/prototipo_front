@@ -3,6 +3,7 @@ package com.comercialnova.front.beans.demo;
 import com.comercialnova.front.api.ApiException;
 import com.comercialnova.front.api.ClienteApi;
 import com.comercialnova.front.api.ProductoApi;
+import com.comercialnova.front.api.RestCliente;
 import com.comercialnova.front.api.VentaApi;
 import com.comercialnova.front.core.CtrTemplate;
 import com.comercialnova.front.modelo.Producto;
@@ -25,6 +26,7 @@ public class CtrDemoConcurrencia extends CtrTemplate {
     private final transient ClienteApi clienteApi;
     private final transient ProductoApi productoApi;
     private final transient VentaApi ventaApi;
+    private final transient RestCliente restCliente;
 
     private List<Producto> productos = Collections.emptyList();
     private Long productoId;
@@ -37,11 +39,13 @@ public class CtrDemoConcurrencia extends CtrTemplate {
     private int otrosErrores;
     private int stockDespues;
 
-    public CtrDemoConcurrencia(ClienteApi clienteApi, ProductoApi productoApi, VentaApi ventaApi) {
+    public CtrDemoConcurrencia(ClienteApi clienteApi, ProductoApi productoApi, VentaApi ventaApi,
+                               RestCliente restCliente) {
         super("Demostracion de concurrencia");
         this.clienteApi = clienteApi;
         this.productoApi = productoApi;
         this.ventaApi = ventaApi;
+        this.restCliente = restCliente;
     }
 
     @PostConstruct
@@ -63,6 +67,7 @@ public class CtrDemoConcurrencia extends CtrTemplate {
         try {
             final Long clienteId = clienteApi.listar().get(0).getId();
             final Long id = productoId;
+            final String sesion = restCliente.sesionActual();
             stockAntes = productoApi.obtener(id).getStock();
 
             AtomicInteger ok = new AtomicInteger();
@@ -76,7 +81,8 @@ public class CtrDemoConcurrencia extends CtrTemplate {
                 pool.submit(() -> {
                     try {
                         largada.await();
-                        ventaApi.registrar(new VentaNueva(clienteId, vendedor).agregar(id, 1));
+                        restCliente.conSesion(sesion,
+                                () -> ventaApi.registrar(new VentaNueva(clienteId, vendedor).agregar(id, 1)));
                         ok.incrementAndGet();
                     } catch (ApiException e) {
                         if (e.esConflicto()) {
@@ -86,6 +92,8 @@ public class CtrDemoConcurrencia extends CtrTemplate {
                         }
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
+                        otros.incrementAndGet();
+                    } catch (RuntimeException e) {
                         otros.incrementAndGet();
                     }
                 });
