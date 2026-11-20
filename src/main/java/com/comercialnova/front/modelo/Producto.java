@@ -8,6 +8,8 @@ public class Producto implements Serializable {
     private String nombre;
     private BigDecimal precio;
     private int stock;
+    private int stockMinimo;
+    private boolean bajoMinimo;
     private Long version;
 
     public boolean isAgotado() { return stock == 0; }
@@ -20,6 +22,10 @@ public class Producto implements Serializable {
     public void setPrecio(BigDecimal precio) { this.precio = precio; }
     public int getStock() { return stock; }
     public void setStock(int stock) { this.stock = stock; }
+    public int getStockMinimo() { return stockMinimo; }
+    public void setStockMinimo(int stockMinimo) { this.stockMinimo = stockMinimo; }
+    public boolean isBajoMinimo() { return bajoMinimo; }
+    public void setBajoMinimo(boolean bajoMinimo) { this.bajoMinimo = bajoMinimo; }
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
 }

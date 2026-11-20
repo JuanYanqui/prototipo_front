@@ -86,3 +86,15 @@ body { margin:0; font-family: Segoe UI, Arial, sans-serif; background: var(--gri
   .layout-main { margin-left:0; padding-top:0; }
   .formgrid { grid-template-columns: 1fr 1fr; }
 }
+
+/* Stock minimo y Kardex */
+.fila-bajo-minimo { background: #fff6e0 !important; }
+.aviso-minimo { background:#fff6e0; border:1px solid #f0d58a; color:#7a5a00; padding:8px 12px; border-radius:6px; margin:8px 0; font-size:14px; }
+.acciones-fila { display:flex; gap:4px; flex-wrap:wrap; }
+.formgrid.dos { grid-template-columns: 1fr 1fr; }
+.pie-dialogo { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; }
+.dato-kardex { font-size:18px; font-weight:600; color: var(--azul); }
+.tipo-mov { padding:2px 8px; border-radius:10px; font-size:12px; font-weight:600; }
+.tipo-ENTRADA { background:#e6f4ea; color:#1e7e34; }
+.tipo-SALIDA { background:#fbeaec; color:#b02a37; }
+.tipo-AJUSTE { background:#e8eef7; color:#1f4e8c; }

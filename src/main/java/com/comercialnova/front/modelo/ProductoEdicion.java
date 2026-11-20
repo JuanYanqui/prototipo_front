@@ -8,6 +8,7 @@ public class ProductoEdicion implements Serializable {
     private String nombre;
     private BigDecimal precio;
     private Integer stock;
+    private Integer stockMinimo;
     private Long version;
 
     public static ProductoEdicion de(Producto p) {
@@ -16,6 +17,7 @@ public class ProductoEdicion implements Serializable {
         e.nombre = p.getNombre();
         e.precio = p.getPrecio();
         e.stock = p.getStock();
+        e.stockMinimo = p.getStockMinimo();
         e.version = p.getVersion();
         return e;
     }
@@ -28,6 +30,8 @@ public class ProductoEdicion implements Serializable {
     public void setPrecio(BigDecimal precio) { this.precio = precio; }
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
+    public Integer getStockMinimo() { return stockMinimo; }
+    public void setStockMinimo(Integer stockMinimo) { this.stockMinimo = stockMinimo; }
     public Long getVersion() { return version; }
     public void setVersion(Long version) { this.version = version; }
 }

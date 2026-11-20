@@ -16,7 +16,13 @@
             </div>
             <p:separator/>
 
-            <p:dataTable value="#{CtrInventarioProductos.productos}" var="pr" emptyMessage="No hay productos" styleClass="tabla">
+            <h:panelGroup layout="block" styleClass="aviso-minimo" rendered="#{CtrInventarioProductos.totalBajoMinimo gt 0}">
+                <i class="pi pi-exclamation-triangle"/>
+                #{CtrInventarioProductos.totalBajoMinimo} producto(s) en su stock mínimo o por debajo (resaltados en amarillo).
+            </h:panelGroup>
+
+            <p:dataTable value="#{CtrInventarioProductos.productos}" var="pr" emptyMessage="No hay productos"
+                         styleClass="tabla" rowStyleClass="#{pr.bajoMinimo ? 'fila-bajo-minimo' : ''}">
                 <p:column headerText="Producto">#{pr.nombre}</p:column>
                 <p:column headerText="Precio" styleClass="num">
                     <h:outputText value="#{pr.precio}"><f:convertNumber pattern="$#,##0.00" locale="en_US"/></h:outputText>
@@ -24,14 +30,24 @@
                 <p:column headerText="Stock" styleClass="num">
                     <h:outputText value="#{pr.agotado ? 'Agotado' : pr.stock}" styleClass="#{pr.agotado ? 'agotado' : ''}"/>
                 </p:column>
+                <p:column headerText="Mínimo" styleClass="num">#{pr.stockMinimo}</p:column>
                 <p:column headerText="Versión" styleClass="num">#{pr.version}</p:column>
-                <p:column style="width:110px">
-                    <p:commandButton value="Editar" icon="pi pi-pencil" styleClass="ui-button-secondary"
-                                     actionListener="#{CtrInventarioProductos.editar(pr)}" process="@this" update="@form"/>
+                <p:column style="width:250px">
+                    <div class="acciones-fila">
+                        <p:commandButton value="Editar" icon="pi pi-pencil" styleClass="ui-button-secondary"
+                                         actionListener="#{CtrInventarioProductos.editar(pr)}" process="@this" update="@form"/>
+                        <p:commandButton value="Ingreso" icon="pi pi-plus" styleClass="ui-button-success"
+                                         actionListener="#{CtrInventarioProductos.prepararIngreso(pr)}" process="@this"
+                                         update=":frmIngreso" oncomplete="PF('dlgIngreso').show()"/>
+                        <p:button value="Kardex" icon="pi pi-list" styleClass="ui-button-outlined"
+                                  outcome="/inventario/kardex">
+                            <f:param name="productoId" value="#{pr.id}"/>
+                        </p:button>
+                    </div>
                 </p:column>
             </p:dataTable>
 
-            <!-- Edicion (bloqueo optimista con "version") -->
+            <!-- Edicion (bloqueo optimista con "version"); un cambio de stock queda como AJUSTE en el Kardex -->
             <p:panel header="Editar producto (versión que usted abrió: #{CtrInventarioProductos.edicion.version})"
                      rendered="#{CtrInventarioProductos.editando}" styleClass="panel-edicion">
                 <div class="formgrid">
@@ -47,14 +63,43 @@
                         <p:outputLabel for="stock" value="Stock"/>
                         <p:inputText id="stock" value="#{CtrInventarioProductos.edicion.stock}"/>
                     </div>
+                    <div class="campo">
+                        <p:outputLabel for="stockMinimo" value="Stock mínimo"/>
+                        <p:inputText id="stockMinimo" value="#{CtrInventarioProductos.edicion.stockMinimo}"/>
+                    </div>
                 </div>
                 <p:commandButton value="Guardar" icon="pi pi-save"
                                  actionListener="#{CtrInventarioProductos.guardar()}" update="@form"/>
                 <p:commandButton value="Cancelar" styleClass="ui-button-secondary" style="margin-left:8px"
                                  actionListener="#{CtrInventarioProductos.cancelar()}" process="@this" update="@form"/>
-                <p class="nota">Prueba: abra esta pantalla en dos pestañas, edite el mismo producto en ambas
-                    y guarde primero en una y luego en la otra. La segunda será rechazada.</p>
+                <p class="nota">Si cambia el stock aquí, quedará registrado como AJUSTE en el Kardex.
+                    Para mercadería que llega, use el botón «Ingreso».</p>
             </p:panel>
         </h:form>
+
+        <p:dialog header="Ingreso de mercadería" widgetVar="dlgIngreso" modal="true" resizable="false" width="440" responsive="true">
+            <h:form id="frmIngreso">
+                <p class="subtitulo">Producto: <b>#{CtrInventarioProductos.productoIngreso.nombre}</b>
+                    (stock actual #{CtrInventarioProductos.productoIngreso.stock})</p>
+                <div class="formgrid dos">
+                    <div class="campo">
+                        <p:outputLabel for="cantidad" value="Cantidad que ingresa"/>
+                        <p:spinner id="cantidad" value="#{CtrInventarioProductos.cantidadIngreso}" min="1"/>
+                    </div>
+                    <div class="campo ancho-2">
+                        <p:outputLabel for="motivo" value="Motivo (opcional)"/>
+                        <p:inputText id="motivo" value="#{CtrInventarioProductos.motivoIngreso}"
+                                     placeholder="Ej. Compra a proveedor" maxlength="200"/>
+                    </div>
+                </div>
+                <div class="pie-dialogo">
+                    <p:commandButton value="Registrar ingreso" icon="pi pi-check"
+                                     actionListener="#{CtrInventarioProductos.registrarIngreso()}" update=":frmListado"
+                                     oncomplete="if (args &amp;&amp; args.guardado) PF('dlgIngreso').hide()"/>
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-button-secondary"
+                                     onclick="PF('dlgIngreso').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

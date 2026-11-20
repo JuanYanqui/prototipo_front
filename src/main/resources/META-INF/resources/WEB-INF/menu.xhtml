@@ -19,6 +19,8 @@
                 <p:submenu label="Inventario" rendered="#{SesionUsuario.admin}">
                     <p:menuitem value="Productos" outcome="/inventario/inventarioProductos" icon="pi pi-box"
                                 styleClass="#{view.viewId eq '/inventario/inventarioProductos.xhtml' ? 'menu-activo' : ''}"/>
+                    <p:menuitem value="Kardex" outcome="/inventario/kardex" icon="pi pi-history"
+                                styleClass="#{view.viewId eq '/inventario/kardex.xhtml' ? 'menu-activo' : ''}"/>
                 </p:submenu>
                 <p:submenu label="Demostración" rendered="#{SesionUsuario.admin}">
                     <p:menuitem value="Concurrencia" outcome="/demo/demoConcurrencia" icon="pi pi-bolt"
