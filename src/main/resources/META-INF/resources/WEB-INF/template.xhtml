@@ -19,6 +19,7 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{SesionUsuario.verificarAcceso}"/>
     <div class="layout-wrapper">
         <!-- EL TOPBAR (Barra superior) ESTÁ EN TOPBAR.XHTML -->
         <ui:include src="./topbar.xhtml"/>

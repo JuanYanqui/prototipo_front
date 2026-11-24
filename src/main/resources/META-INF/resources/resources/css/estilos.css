@@ -12,7 +12,24 @@ body { margin:0; font-family: Segoe UI, Arial, sans-serif; background: var(--gri
           background: var(--azul); color:#fff; display:flex; align-items:center; gap:24px; padding:0 20px; }
 .topbar .logo { color:#fff; text-decoration:none; font-size:19px; font-weight:600; }
 .topbar .logo i { margin-right:6px; }
-.topbar-info { font-size:13px; opacity:.8; }
+.topbar-info { font-size:13px; opacity:.8; flex:1; }
+.topbar-user { margin-left:auto; display:flex; align-items:center; gap:10px; font-size:13px; }
+.topbar-logout-form { display:inline; }
+.topbar-logout-form .ui-button { color:#fff !important; }
+
+/* ---------- Login ---------- */
+.login-body { min-height:100vh; display:flex; align-items:center; justify-content:center;
+              background: linear-gradient(160deg, #1f4e8c 0%, #173b6b 45%, #f3f5f8 45%); }
+.login-card { width:100%; max-width:380px; background:#fff; border:1px solid var(--borde);
+              border-radius:10px; padding:28px 24px; box-shadow:0 10px 30px rgba(0,0,0,.12); }
+.login-brand { text-align:center; margin-bottom:18px; }
+.login-brand i { font-size:34px; color: var(--azul); }
+.login-brand h1 { margin:8px 0 4px; font-size:22px; color: var(--azul); }
+.login-brand p { margin:0; color:#666; font-size:13px; }
+.login-campo { margin-bottom:12px; }
+.login-campo label { display:block; font-size:13px; color:#555; margin-bottom:4px; }
+.login-campo .ui-inputfield, .login-campo .ui-password { width:100%; }
+.login-boton { width:100%; margin-top:6px; }
 
 /* ---------- Menu lateral (WEB-INF/menu.xhtml) ---------- */
 .layout-menu { position:fixed; top:var(--alto-topbar); bottom:0; left:0; width:var(--ancho-menu);

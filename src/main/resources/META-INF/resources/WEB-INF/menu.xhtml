@@ -14,11 +14,11 @@
                     <p:menuitem value="Historial de ventas" outcome="/ventas/ventaHistorial" icon="pi pi-list"
                                 styleClass="#{view.viewId eq '/ventas/ventaHistorial.xhtml' ? 'menu-activo' : ''}"/>
                 </p:submenu>
-                <p:submenu label="Inventario">
+                <p:submenu label="Inventario" rendered="#{SesionUsuario.admin}">
                     <p:menuitem value="Productos" outcome="/inventario/inventarioProductos" icon="pi pi-box"
                                 styleClass="#{view.viewId eq '/inventario/inventarioProductos.xhtml' ? 'menu-activo' : ''}"/>
                 </p:submenu>
-                <p:submenu label="Demostración">
+                <p:submenu label="Demostración" rendered="#{SesionUsuario.admin}">
                     <p:menuitem value="Concurrencia" outcome="/demo/demoConcurrencia" icon="pi pi-bolt"
                                 styleClass="#{view.viewId eq '/demo/demoConcurrencia.xhtml' ? 'menu-activo' : ''}"/>
                 </p:submenu>
